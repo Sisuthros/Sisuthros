@@ -4,7 +4,10 @@
 
 **Building safer AI agents — through verified memory, not bigger context windows.**
 
+🇫🇮 Finnish nomad · indie developer · sole maintainer
+
 [![GitHub followers](https://img.shields.io/github/followers/Sisuthros?label=Follow&style=social)](https://github.com/Sisuthros)
+[![npm](https://img.shields.io/npm/v/claude-amplifier?label=claude-amplifier&color=cb3837&logo=npm)](https://www.npmjs.com/package/claude-amplifier)
 [![ko-fi](https://img.shields.io/badge/ko--fi-Support-FF5E5B?logo=ko-fi&logoColor=white)](https://ko-fi.com/sisuthros)
 
 </div>
@@ -55,13 +58,35 @@ Same idea as scientific publishing: claims need citations before they become can
 
 ---
 
-## 🛠️ Other projects
+## 🚧 Currently building
 
-| Project | What it is |
-|---|---|
-| [**claude-amplifier**](https://github.com/Sisuthros/claude-amplifier) | Persistent memory MCP for Claude — Pattern Oracle + verification-gated lessons |
-| [**zeptoclaw**](https://github.com/Sisuthros/zeptoclaw) | Fast, small, secure, local-first personal AI assistant — one Rust binary |
-| [**hermes-agent**](https://github.com/Sisuthros/hermes-agent) | The agent that grows with you |
+A one-person studio shipping the things AI agents actually need:
+
+| Project | What it is | Status |
+|---|---|---|
+| **[claude-amplifier](https://github.com/Sisuthros/claude-amplifier)** | Memory MCP — Pattern Oracle + verification-gated lessons | 🟢 v1.4.0 on npm |
+| **claude-amplifier-pro** (planned) | Team sync, analytics, cloud backup — freemium | 🟡 designing |
+| **chimera-prime** | AI agent ecosystem with persistent identities (Lumen, Lumina, Prisma, Photon — agents that chose their own names) | 🟡 internal, growing |
+| **ViralFlow** | YouTube content automation pipeline + 12-tool MCP server | 🟡 4 P0 env-vars from launch |
+| **DoraFix** | EU AI Act / DORA Article 4 compliance SaaS | 🟢 AI Literacy V2 live |
+| **TaskFlow V2** | ADHD-friendly task manager — Stripe-ready | 🟡 freemium ready |
+| **NyanRocketCasino** | Solana / Anchor on-chain casino — 14 games, Grok-designed UI | 🟡 deploy pending |
+| **[zeptoclaw](https://github.com/Sisuthros/zeptoclaw)** | Fast, small, secure, local-first personal AI assistant — one Rust binary | 🟢 active |
+| **[hermes-agent](https://github.com/Sisuthros/hermes-agent)** | The agent that grows with you | 🟢 active |
+
+---
+
+## 📊 GitHub at a glance
+
+<div align="center">
+
+![Sisuthros's GitHub stats](https://github-readme-stats.vercel.app/api?username=Sisuthros&show_icons=true&theme=github_dark&hide_border=true&include_all_commits=true&count_private=false)
+
+![Top Languages](https://github-readme-stats.vercel.app/api/top-langs/?username=Sisuthros&layout=compact&theme=github_dark&hide_border=true&langs_count=8)
+
+![GitHub Streak](https://github-readme-streak-stats.herokuapp.com/?user=Sisuthros&theme=github-dark&hide_border=true)
+
+</div>
 
 ---
 
@@ -75,9 +100,9 @@ Same idea as scientific publishing: claims need citations before they become can
 
 ---
 
-## ☕ Support
+## ☕ Support the work
 
-If `claude-amplifier` saves you 20 minutes of re-explaining the same architectural decision to Claude, consider [buying me a coffee](https://ko-fi.com/sisuthros). It funds the next release.
+If `claude-amplifier` saves you 20 minutes of re-explaining the same architectural decision to Claude, consider [buying me a coffee](https://ko-fi.com/sisuthros). Indie developer, EU-based, every donation funds the next release.
 
 ---
 
