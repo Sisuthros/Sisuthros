@@ -1,38 +1,127 @@
-## Sisuthros
+# Sisuthros
 
-Four public repositories, each doing one thing and saying plainly what it does not do.
+### Building the reliability layer between probabilistic AI decisions and irreversible real-world actions.
 
-### [familyclaw-oss](https://github.com/Sisuthros/familyclaw-oss)
+AI agents are beginning to charge cards, send messages, modify infrastructure, approve workflows, and trigger systems that cannot simply be “rolled back” by regenerating a better answer.
 
-A Rust agent runtime where in-flight work survives a crash: at-most-once external
-side effects, durable memory, contract-checked coordination.
+My work focuses on the boundary where **model output becomes real-world effect**:
 
-Licensed MIT OR Apache-2.0. CI runs `cargo fmt`, `clippy -D warnings`, the test
-suite, `cargo audit` and `cargo deny` on every push. Suppressed advisories are
-listed with their reasons in `.cargo/audit.toml`, not hidden.
+- **Can the system prove an action is allowed before it executes?**
+- **Can an approved action survive crashes, retries, and replay without firing twice?**
+- **Can the evidence behind that action remain inspectable after the fact?**
 
-### [Aethel](https://github.com/Sisuthros/Aethel)
+The core stack is **Aethel + FamilyClaw**.
 
-A deterministic policy and type language for trustworthy AI-agent effects. One
-invariant: a `Claim<T>` cannot be used where an effect requires
-`Verified<T, Policy>`. The compiler rejects the program before an effect is
-dispatched.
+```text
+LLM / AGENT
+    │
+    ▼
+ Claim<T>                     untrusted model output
+    │
+    ▼
+ AETHEL                       policy + evidence boundary
+    │
+    ▼
+ Verified<T, Policy>
+    │
+    ▼
+ FAMILYCLAW                   crash-safe execution boundary
+    │
+    ▼
+ REAL-WORLD EFFECT
+```
 
-Alpha. The bundled interpreter is a fail-closed symbolic simulator for tests and
-traces, not a production effect runtime — see
-[docs/non-guarantees.md](https://github.com/Sisuthros/Aethel/blob/main/docs/non-guarantees.md).
+## Aethel
 
-### [cra24-clock](https://github.com/Sisuthros/cra24-clock)
+**A deterministic policy and type language for trustworthy AI-agent effects.**
 
-Records when you became aware of an actively exploited vulnerability, computes
-the CRA Article 14 24h/72h/14d deadlines, and keeps a tamper-evident log. Runs
-offline. MIT.
+> A `Claim<T>` cannot be used where an effect requires `Verified<T, Policy>`.
 
-### [sisuthros.github.io](https://github.com/Sisuthros/sisuthros.github.io)
+Aethel makes the trust boundary explicit in the program itself. The checker rejects unverified claims, policy mismatches, ambiguous effects, and invalid proof paths before an effect can be dispatched.
 
-Sisuthros Family — AI agents that prove they're honest.
+**What it is today:** an alpha policy compiler and fail-closed symbolic simulator.
+
+**What it deliberately does not claim:** production effect execution, durable crash recovery, or universal proof acquisition.
+
+→ **[Explore Aethel](https://github.com/Sisuthros/Aethel)**
 
 ---
 
-Everything above is public and runnable. Anything not listed here is not ready to
-be judged yet.
+## FamilyClaw
+
+**A crash-safe Rust runtime for AI agents that perform consequential external actions.**
+
+The failure mode is simple and expensive:
+
+```text
+agent dispatches external effect
+            ↓
+       process dies
+            ↓
+ durable record was never committed
+            ↓
+        agent replays
+            ↓
+      effect fires again
+```
+
+FamilyClaw is built around reproducible crash-window testing and durable replay. Its strongest claim is intentionally narrow: **at-most-once external dispatch across the tested crash/replay boundary**, not magical universal exactly-once execution.
+
+The public proof harness intentionally kills the runtime after an external effect fires but before the durable completion record is written, restarts it, and verifies that the effect count remains one.
+
+→ **[Explore FamilyClaw](https://github.com/Sisuthros/familyclaw-oss)**
+
+---
+
+## Why they belong together
+
+Aethel and FamilyClaw protect different sides of the same boundary:
+
+| Layer | Question | Project |
+|---|---|---|
+| **Before execution** | Is this action actually authorized by the required policy and evidence? | **Aethel** |
+| **During execution** | Can the approved action survive crashes, retries, and replay safely? | **FamilyClaw** |
+| **After execution** | Can we retain a durable, inspectable record of what happened? | **FamilyClaw / receipts** |
+
+The thesis is straightforward:
+
+> **Proof before effect. Safe execution after approval.**
+
+---
+
+## Other public work
+
+### [cra24-clock](https://github.com/Sisuthros/cra24-clock)
+
+An offline CRA Article 14 deadline clock for actively exploited vulnerabilities. It records when awareness began, computes the 24h / 72h / 14d reporting deadlines, and maintains a tamper-evident log.
+
+### [sisuthros.github.io](https://github.com/Sisuthros/sisuthros.github.io)
+
+Public project site and technical demos.
+
+---
+
+## Engineering posture
+
+I care more about **falsifiable guarantees than impressive adjectives**.
+
+That means:
+
+- adversarial and negative tests, not only happy paths
+- fail-closed boundaries where uncertainty matters
+- reproducible local proofs
+- explicit non-guarantees
+- crash and replay testing across real process boundaries
+- no hiding uncomfortable assumptions behind “AI safety” language
+
+If a claim cannot survive a hostile test, it should not be in the pitch.
+
+---
+
+## Current focus
+
+I am developing Aethel + FamilyClaw into infrastructure for teams deploying AI agents that can cause consequential external effects, especially payments, infrastructure changes, customer operations, approvals, and other workflows where duplicate or insufficiently authorized execution carries real cost.
+
+**Interested in:** design partners, technical evaluation, research collaboration, and funding conversations around dependable agent infrastructure.
+
+**Start here:** [FamilyClaw crash-safety proof](https://github.com/Sisuthros/familyclaw-oss) · [Aethel policy compiler](https://github.com/Sisuthros/Aethel)
