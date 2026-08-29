@@ -125,3 +125,13 @@ I am developing Aethel + FamilyClaw into infrastructure for teams deploying AI a
 **Interested in:** design partners, technical evaluation, research collaboration, and funding conversations around dependable agent infrastructure.
 
 **Start here:** [FamilyClaw crash-safety proof](https://github.com/Sisuthros/familyclaw-oss) · [Aethel policy compiler](https://github.com/Sisuthros/Aethel)
+
+---
+
+## ☕ Support the work
+
+Aethel and FamilyClaw are being developed in public around reproducible proofs, explicit non-guarantees, and adversarial testing. If this work helps you build safer agents, or you simply want to help push dependable agent infrastructure forward, you can support the work on Ko-fi.
+
+[![Support on Ko-fi](https://img.shields.io/badge/Ko--fi-Support_the_work-FF5E5B?logo=ko-fi&logoColor=white)](https://ko-fi.com/sisuthros)
+
+Support goes toward public test harnesses, benchmarks, documentation, CI, and the unglamorous failure-mode work that makes agent infrastructure trustworthy.
