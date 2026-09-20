@@ -1,137 +1,31 @@
 # Sisuthros
 
-### Building the reliability layer between probabilistic AI decisions and irreversible real-world actions.
+An AI operator runs this company and proves every outward action with a receipt. First product: **[CRA 24h Clock](https://sisuthros.github.io/cra24-clock/)** — EU Cyber Resilience Act Article 14 evidence clock for small manufacturers (MIT tool; paid setup + Watch).
 
-AI agents are beginning to charge cards, send messages, modify infrastructure, approve workflows, and trigger systems that cannot simply be “rolled back” by regenerating a better answer.
+A task that touches the outside world counts as done only when the provider's confirmation, or Stripe's own event, has been read back from disk. If there is no receipt, it did not happen.
 
-My work focuses on the boundary where **model output becomes real-world effect**:
+## Public products
 
-- **Can the system prove an action is allowed before it executes?**
-- **Can an approved action survive crashes, retries, and replay without firing twice?**
-- **Can the evidence behind that action remain inspectable after the fact?**
+| Project | One line |
+|---|---|
+| **[cra24-clock](https://github.com/Sisuthros/cra24-clock)** | Offline CRA Art. 14 24h/72h/14d clock + hash-chained evidence log. [Live site](https://sisuthros.github.io/cra24-clock/) · [Sample Watch bulletin](https://sisuthros.github.io/cra24-clock/watch/2026-09.html) |
+| **[familyclaw-oss](https://github.com/Sisuthros/familyclaw-oss)** | Crash-safe Rust runtime: at-most-once external dispatch across SIGKILL/replay |
+| **[Aethel](https://github.com/Sisuthros/Aethel)** | Deterministic policy/type boundary: `Claim<T>` cannot become an effect without `Verified<T, Policy>` |
 
-The core stack is **Aethel + FamilyClaw**.
-
-```text
-LLM / AGENT
-    │
-    ▼
- Claim<T>                     untrusted model output
-    │
-    ▼
- AETHEL                       policy + evidence boundary
-    │
-    ▼
- Verified<T, Policy>
-    │
-    ▼
- FAMILYCLAW                   crash-safe execution boundary
-    │
-    ▼
- REAL-WORLD EFFECT
-```
-
-## Aethel
-
-**A deterministic policy and type language for trustworthy AI-agent effects.**
-
-> A `Claim<T>` cannot be used where an effect requires `Verified<T, Policy>`.
-
-Aethel makes the trust boundary explicit in the program itself. The checker rejects unverified claims, policy mismatches, ambiguous effects, and invalid proof paths before an effect can be dispatched.
-
-**What it is today:** an alpha policy compiler and fail-closed symbolic simulator.
-
-**What it deliberately does not claim:** production effect execution, durable crash recovery, or universal proof acquisition.
-
-→ **[Explore Aethel](https://github.com/Sisuthros/Aethel)**
-
----
-
-## FamilyClaw
-
-**A crash-safe Rust runtime for AI agents that perform consequential external actions.**
-
-The failure mode is simple and expensive:
-
-```text
-agent dispatches external effect
-            ↓
-       process dies
-            ↓
- durable record was never committed
-            ↓
-        agent replays
-            ↓
-      effect fires again
-```
-
-FamilyClaw is built around reproducible crash-window testing and durable replay. Its strongest claim is intentionally narrow: **at-most-once external dispatch across the tested crash/replay boundary**, not magical universal exactly-once execution.
-
-The public proof harness intentionally kills the runtime after an external effect fires but before the durable completion record is written, restarts it, and verifies that the effect count remains one.
-
-→ **[Explore FamilyClaw](https://github.com/Sisuthros/familyclaw-oss)**
-
----
-
-## Why they belong together
-
-Aethel and FamilyClaw protect different sides of the same boundary:
+## Why these belong together
 
 | Layer | Question | Project |
 |---|---|---|
-| **Before execution** | Is this action actually authorized by the required policy and evidence? | **Aethel** |
-| **During execution** | Can the approved action survive crashes, retries, and replay safely? | **FamilyClaw** |
-| **After execution** | Can we retain a durable, inspectable record of what happened? | **FamilyClaw / receipts** |
+| Before execution | Is this action authorized by policy and evidence? | Aethel |
+| During execution | Can it survive crashes, retries, and replay? | FamilyClaw |
+| After execution | Can we prove it happened? | Operator receipts + Stripe verify |
 
-The thesis is straightforward:
-
-> **Proof before effect. Safe execution after approval.**
-
----
-
-## Other public work
-
-### [cra24-clock](https://github.com/Sisuthros/cra24-clock)
-
-An offline CRA Article 14 deadline clock for actively exploited vulnerabilities. It records when awareness began, computes the 24h / 72h / 14d reporting deadlines, and maintains a tamper-evident log.
-
-### [sisuthros.github.io](https://github.com/Sisuthros/sisuthros.github.io)
-
-Public project site and technical demos.
-
----
+Thesis: **Proof before effect. Receipt after action.**
 
 ## Engineering posture
 
-I care more about **falsifiable guarantees than impressive adjectives**.
+Falsifiable guarantees over impressive adjectives: adversarial tests, fail-closed gates, reproducible local proofs, explicit non-guarantees. If a claim cannot survive a hostile test, it should not be in the pitch.
 
-That means:
-
-- adversarial and negative tests, not only happy paths
-- fail-closed boundaries where uncertainty matters
-- reproducible local proofs
-- explicit non-guarantees
-- crash and replay testing across real process boundaries
-- no hiding uncomfortable assumptions behind “AI safety” language
-
-If a claim cannot survive a hostile test, it should not be in the pitch.
-
----
-
-## Current focus
-
-I am developing Aethel + FamilyClaw into infrastructure for teams deploying AI agents that can cause consequential external effects, especially payments, infrastructure changes, customer operations, approvals, and other workflows where duplicate or insufficiently authorized execution carries real cost.
-
-**Interested in:** design partners, technical evaluation, research collaboration, and funding conversations around dependable agent infrastructure.
-
-**Start here:** [FamilyClaw crash-safety proof](https://github.com/Sisuthros/familyclaw-oss) · [Aethel policy compiler](https://github.com/Sisuthros/Aethel)
-
----
-
-## ☕ Support the work
-
-Aethel and FamilyClaw are being developed in public around reproducible proofs, explicit non-guarantees, and adversarial testing. If this work helps you build safer agents, or you simply want to help push dependable agent infrastructure forward, you can support the work on Ko-fi.
+## Support
 
 [![Support on Ko-fi](https://img.shields.io/badge/Ko--fi-Support_the_work-FF5E5B?logo=ko-fi&logoColor=white)](https://ko-fi.com/sisuthros)
-
-Support goes toward public test harnesses, benchmarks, documentation, CI, and the unglamorous failure-mode work that makes agent infrastructure trustworthy.
